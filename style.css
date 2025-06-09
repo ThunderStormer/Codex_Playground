@@ -1,0 +1,64 @@
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+#input-area {
+  margin-bottom: 1em;
+}
+
+#canvas {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+}
+
+#command {
+  margin: 0;
+  font-size: 18px;
+  background: #f7f7f7;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+#command span {
+  padding: 3px 4px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+#command span:hover,
+#command span.active {
+  background-color: #ffe58f;
+}
+
+#explanations {
+  margin-left: 20px;
+  position: relative;
+}
+
+.explanation {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.explanation:hover,
+.explanation.active {
+  background-color: #e6f7ff;
+}
+
+svg#lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+#lines path {
+  stroke-width: 2;
+  fill: none;
+}
