@@ -49,14 +49,14 @@ function explain(model) {
     const spanRect = span.getBoundingClientRect();
     const boxRect = box.getBoundingClientRect();
 
-    const startX = spanRect.right - containerRect.left;
-    const startY = spanRect.top + spanRect.height / 2 - containerRect.top;
+    const startX = spanRect.left + spanRect.width / 2 - containerRect.left;
+    const startY = spanRect.bottom - containerRect.top;
     const endX = boxRect.left - containerRect.left;
     const endY = boxRect.top + boxRect.height / 2 - containerRect.top;
 
-    const midX = startX + 40 + idx * 20;
+    const midY = startY + 20 + idx * 20;
 
-    const d = `M ${startX} ${startY} L ${midX} ${startY} L ${midX} ${endY} L ${endX} ${endY}`;
+    const d = `M ${startX} ${startY} L ${startX} ${midY} L ${endX} ${midY} L ${endX} ${endY}`;
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', d);
