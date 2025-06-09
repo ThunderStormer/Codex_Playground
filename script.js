@@ -19,13 +19,9 @@ function explain(model) {
   explanations.innerHTML = '';
   linesSvg.innerHTML = '';
 
-<<<<<<< HEAD
   const parts = model
     .replace(/\//g, ' ')
     .match(/[A-Za-z]+\d+|\d+|[A-Za-z]+/g) || [];
-=======
-  const parts = model.replace(/\//g, ' ').match(/[A-Za-z]+\d+|\d+|[A-Za-z]+/g) || [];
->>>>>>> d0cc03d (Improve model explainer UI)
   const spans = [];
   parts.forEach((part, idx) => {
     const span = document.createElement('span');
@@ -43,7 +39,6 @@ function explain(model) {
     spans.push({span, box});
   });
 
-<<<<<<< HEAD
 
   // draw connector lines with 90-degree bends
   const containerRect = document.getElementById('canvas').getBoundingClientRect();
@@ -62,30 +57,6 @@ function explain(model) {
     const midX = startX + 40 + idx * 20;
 
     const d = `M ${startX} ${startY} L ${midX} ${startY} L ${midX} ${endY} L ${endX} ${endY}`;
-=======
-  // draw lines with unique lanes and 90deg bends
-  let lane = 0;
-  spans.forEach(({span, box}, idx) => {
-    const spanRect = span.getBoundingClientRect();
-    const boxRect = box.getBoundingClientRect();
-    const containerRect = command.getBoundingClientRect();
-
-    const x1 = spanRect.right - containerRect.left;
-    const y1 = spanRect.top + spanRect.height / 2 - containerRect.top;
-    const x2 = boxRect.left - containerRect.left;
-    const y2 = boxRect.top + boxRect.height / 2 - containerRect.top;
-
-    lane = Math.max(lane + 30, y1, y2);
-
-    const d = [
-      `M${x1},${y1}`,
-      `H${x1 + 20}`,
-      `V${lane}`,
-      `H${x2 - 20}`,
-      `V${y2}`,
-      `H${x2}`
-    ].join(' ');
->>>>>>> d0cc03d (Improve model explainer UI)
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', d);
