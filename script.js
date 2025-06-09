@@ -37,31 +37,12 @@ function explain(model) {
     spans.push({span, box});
   });
 
-  // draw lines with unique lanes and 90deg bends
-  let lane = 0;
+
   spans.forEach(({span, box}, idx) => {
     const spanRect = span.getBoundingClientRect();
     const boxRect = box.getBoundingClientRect();
     const containerRect = command.getBoundingClientRect();
 
-    const x1 = spanRect.right - containerRect.left;
-    const y1 = spanRect.top + spanRect.height / 2 - containerRect.top;
-    const x2 = boxRect.left - containerRect.left;
-    const y2 = boxRect.top + boxRect.height / 2 - containerRect.top;
-
-    lane = Math.max(lane + 30, y1, y2);
-
-    const d = [
-      `M${x1},${y1}`,
-      `H${x1 + 20}`,
-      `V${lane}`,
-      `H${x2 - 20}`,
-      `V${y2}`,
-      `H${x2}`
-    ].join(' ');
-
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', d);
     path.setAttribute('stroke', `hsl(${idx * 40},70%,50%)`);
     linesSvg.appendChild(path);
   });
