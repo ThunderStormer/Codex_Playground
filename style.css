@@ -10,8 +10,6 @@ body {
 
 #canvas {
   position: relative;
-  display: flex;
-  align-items: flex-start;
   padding: 20px;
   background: #fff;
   border: 1px solid #ddd;
@@ -45,10 +43,13 @@ body {
 }
 
 #explanations {
-  margin-left: 20px;
+  margin-top: 20px;
   position: relative;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  padding-left: 10px; /* align with command padding */
+  box-sizing: border-box;
 }
 
 .explanation {
@@ -59,7 +60,8 @@ body {
   margin-bottom: 8px;
   position: relative;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  width: 260px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .explanation:hover,
