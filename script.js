@@ -19,7 +19,9 @@ function explain(model) {
   explanations.innerHTML = '';
   linesSvg.innerHTML = '';
 
-  const parts = model.replace(/\//g, ' ').match(/[A-Za-z]+\d+|\d+|[A-Za-z]+/g) || [];
+  const parts = model
+    .replace(/\//g, ' ')
+    .match(/[A-Za-z]+\d+|\d+|[A-Za-z]+/g) || [];
   const spans = [];
   parts.forEach((part, idx) => {
     const span = document.createElement('span');
@@ -38,11 +40,26 @@ function explain(model) {
   });
 
 
-  spans.forEach(({span, box}, idx) => {
+  // draw connector lines with 90-degree bends
+  const containerRect = document.getElementById('canvas').getBoundingClientRect();
+  linesSvg.setAttribute('width', containerRect.width);
+  linesSvg.setAttribute('height', containerRect.height);
+
+  spans.forEach(({ span, box }, idx) => {
     const spanRect = span.getBoundingClientRect();
     const boxRect = box.getBoundingClientRect();
-    const containerRect = command.getBoundingClientRect();
 
+    const startX = spanRect.right - containerRect.left;
+    const startY = spanRect.top + spanRect.height / 2 - containerRect.top;
+    const endX = boxRect.left - containerRect.left;
+    const endY = boxRect.top + boxRect.height / 2 - containerRect.top;
+
+    const midX = startX + 40 + idx * 20;
+
+    const d = `M ${startX} ${startY} L ${midX} ${startY} L ${midX} ${endY} L ${endX} ${endY}`;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d);
     path.setAttribute('stroke', `hsl(${idx * 40},70%,50%)`);
     linesSvg.appendChild(path);
   });
