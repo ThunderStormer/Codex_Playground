@@ -1,5 +1,7 @@
 body {
-
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  padding: 20px;
 }
 
 #input-area {
@@ -10,31 +12,43 @@ body {
   position: relative;
   display: flex;
   align-items: flex-start;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 #command {
   margin: 0;
   font-size: 18px;
-  background: #f7f7f7;
+  background: #2d2d2d;
+  color: #f8f8f2;
   padding: 10px;
   border-radius: 4px;
+  font-family: monospace;
 }
 
 #command span {
   padding: 3px 4px;
   cursor: pointer;
   border-radius: 3px;
-
+  background: #444;
+  color: #fff;
+  margin-right: 2px;
 }
 
 #command span:hover,
 #command span.active {
-
+  background: #fffb91;
+  color: #000;
 }
 
 #explanations {
   margin-left: 20px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .explanation {
@@ -44,7 +58,8 @@ body {
   border-radius: 4px;
   margin-bottom: 8px;
   position: relative;
-
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  width: 260px;
 }
 
 .explanation:hover,
