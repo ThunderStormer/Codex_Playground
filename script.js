@@ -37,19 +37,12 @@ function explain(model) {
     spans.push({span, box});
   });
 
-  // draw lines
+
   spans.forEach(({span, box}, idx) => {
     const spanRect = span.getBoundingClientRect();
     const boxRect = box.getBoundingClientRect();
     const containerRect = command.getBoundingClientRect();
 
-    const x1 = spanRect.left + spanRect.width / 2 - containerRect.left;
-    const y1 = spanRect.bottom - containerRect.top;
-    const x2 = boxRect.left - containerRect.left - 5; // left of explanation
-    const y2 = boxRect.top + boxRect.height / 2 - containerRect.top;
-
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', `M${x1},${y1} L${x1 + 20},${y1} L${x2 - 20},${y2} L${x2},${y2}`);
     path.setAttribute('stroke', `hsl(${idx * 40},70%,50%)`);
     linesSvg.appendChild(path);
   });
