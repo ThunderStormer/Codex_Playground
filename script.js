@@ -41,7 +41,9 @@ function explain(model) {
 
 
   // draw connector lines with 90-degree bends
-  const containerRect = document.getElementById('canvas').getBoundingClientRect();
+  const canvasEl = document.getElementById('canvas');
+  const containerRect = canvasEl.getBoundingClientRect();
+  const leftPad = parseFloat(getComputedStyle(canvasEl).paddingLeft) || 0;
   linesSvg.setAttribute('width', containerRect.width);
   linesSvg.setAttribute('height', containerRect.height);
 
@@ -49,14 +51,20 @@ function explain(model) {
     const spanRect = span.getBoundingClientRect();
     const boxRect = box.getBoundingClientRect();
 
-    const startX = spanRect.left + spanRect.width / 2 - containerRect.left;
+    const startX = spanRect.left + spanRect.width / 2 - containerRect.left - leftPad;
     const startY = spanRect.bottom - containerRect.top;
-    const endX = boxRect.left - containerRect.left;
+    const endX = boxRect.left - containerRect.left - leftPad;
     const endY = boxRect.top + boxRect.height / 2 - containerRect.top;
 
+    const laneX = endX - 20 - idx * 20;   // lane positioned left of the box
     const midY = startY + 20 + idx * 20;
 
-    const d = `M ${startX} ${startY} L ${startX} ${midY} L ${endX} ${midY} L ${endX} ${endY}`;
+    const d =
+      `M ${startX} ${startY}` +
+      ` L ${startX} ${midY}` +
+      ` L ${laneX} ${midY}` +
+      ` L ${laneX} ${endY}` +
+      ` L ${endX} ${endY}`;
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', d);
