@@ -23,6 +23,8 @@ function explain(model) {
     .replace(/\//g, ' ')
     .match(/[A-Za-z]+\d+|\d+|[A-Za-z]+/g) || [];
   const spans = [];
+  const leftIndices = [];
+  const rightIndices = [];
   parts.forEach((part, idx) => {
     const span = document.createElement('span');
     span.textContent = part;
@@ -37,6 +39,12 @@ function explain(model) {
     box.dataset.index = idx;
     explanations.appendChild(box);
     spans.push({span, box});
+
+    if (idx % 2 === 0) {
+      leftIndices.push(idx);
+    } else {
+      rightIndices.push(idx);
+    }
   });
 
   // adjust widths
@@ -58,6 +66,9 @@ function explain(model) {
   linesSvg.setAttribute('width', containerRect.width);
   linesSvg.setAttribute('height', containerRect.height);
 
+  const leftSpacing = leftPad / (leftIndices.length + 1);
+  const rightSpacing = rightPad / (rightIndices.length + 1);
+
   spans.forEach(({ span, box }, idx) => {
     const spanRect = span.getBoundingClientRect();
     const boxRect = box.getBoundingClientRect();
@@ -66,17 +77,26 @@ function explain(model) {
     const startY = spanRect.bottom - containerRect.top;
     const endY = boxRect.top + boxRect.height / 2 - containerRect.top;
     const attachLeft = idx % 2 === 0;
+
     const endX = attachLeft
       ? boxRect.left - containerRect.left - leftPad
       : boxRect.right - containerRect.left - leftPad;
-    const laneBase = attachLeft ? -leftPad / 2 : innerWidth + rightPad / 2;
-    const laneX = attachLeft ? laneBase - idx * 10 : laneBase + idx * 10;
-    const midY = startY + 30 + idx * 20;
+
+    let laneIndex, laneX, startBreak;
+    if (attachLeft) {
+      laneIndex = leftIndices.indexOf(idx) + 1;
+      laneX = -leftPad + leftSpacing * laneIndex;
+      startBreak = startY + 20 + laneIndex * 10;
+    } else {
+      laneIndex = rightIndices.indexOf(idx) + 1;
+      laneX = innerWidth + rightSpacing * laneIndex;
+      startBreak = startY + 20 + laneIndex * 10;
+    }
 
     const d =
       `M ${startX} ${startY}` +
-      ` L ${startX} ${midY}` +
-      ` L ${laneX} ${midY}` +
+      ` L ${startX} ${startBreak}` +
+      ` L ${laneX} ${startBreak}` +
       ` L ${laneX} ${endY}` +
       ` L ${endX} ${endY}`;
 
