@@ -10,7 +10,13 @@ const database = {
   '14': 'Refers to the OS, being Android 14'
 };
 
+let currentModel = '';
+let globalSpans = [];
+let globalLeftIndices = [];
+let globalRightIndices = [];
+
 function explain(model) {
+  currentModel = model;
   const command = document.getElementById('command');
   const explanations = document.getElementById('explanations');
   const linesSvg = document.getElementById('lines');
@@ -46,6 +52,10 @@ function explain(model) {
       rightIndices.push(idx);
     }
   });
+
+  globalSpans = spans;
+  globalLeftIndices = leftIndices;
+  globalRightIndices = rightIndices;
 
   // adjust widths
   const canvasEl = document.getElementById('canvas');
@@ -95,7 +105,7 @@ function explain(model) {
     let laneIndex, laneX, startBreak;
     if (attachLeft) {
       laneIndex = leftIndices.indexOf(idx) + 1;
-      laneX = leftSpacing * laneIndex;
+      laneX = laneAreaLeft - leftSpacing * laneIndex;
       startBreak = startY + 20 + laneIndex * 10;
     } else {
       laneIndex = rightIndices.indexOf(idx) + 1;
@@ -149,4 +159,14 @@ window.addEventListener('DOMContentLoaded', () => {
     explain(model);
   });
   explain(document.getElementById('model').value.trim());
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (currentModel) {
+        explain(currentModel);
+      }
+    }, 150);
+  });
 });
