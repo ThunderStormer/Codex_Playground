@@ -62,9 +62,9 @@ function explain(model) {
   // draw connector lines with 90-degree bends
   const leftPad = parseFloat(getComputedStyle(canvasEl).paddingLeft) || 0;
   const rightPad = parseFloat(getComputedStyle(canvasEl).paddingRight) || 0;
-  const innerWidth = containerRect.width - leftPad - rightPad;
   linesSvg.setAttribute('width', containerRect.width);
   linesSvg.setAttribute('height', containerRect.height);
+  linesSvg.setAttribute('viewBox', `0 0 ${containerRect.width} ${containerRect.height}`);
 
   const leftSpacing = leftPad / (leftIndices.length + 1);
   const rightSpacing = rightPad / (rightIndices.length + 1);
@@ -73,23 +73,23 @@ function explain(model) {
     const spanRect = span.getBoundingClientRect();
     const boxRect = box.getBoundingClientRect();
 
-    const startX = spanRect.left + spanRect.width / 2 - containerRect.left - leftPad;
+    const startX = spanRect.left + spanRect.width / 2 - containerRect.left;
     const startY = spanRect.bottom - containerRect.top;
     const endY = boxRect.top + boxRect.height / 2 - containerRect.top;
     const attachLeft = idx % 2 === 0;
 
     const endX = attachLeft
-      ? boxRect.left - containerRect.left - leftPad
-      : boxRect.right - containerRect.left - leftPad;
+      ? boxRect.left - containerRect.left
+      : boxRect.right - containerRect.left;
 
     let laneIndex, laneX, startBreak;
     if (attachLeft) {
       laneIndex = leftIndices.indexOf(idx) + 1;
-      laneX = -leftPad + leftSpacing * laneIndex;
+      laneX = leftSpacing * laneIndex;
       startBreak = startY + 20 + laneIndex * 10;
     } else {
       laneIndex = rightIndices.indexOf(idx) + 1;
-      laneX = innerWidth + rightSpacing * laneIndex;
+      laneX = containerRect.width - rightPad + rightSpacing * laneIndex;
       startBreak = startY + 20 + laneIndex * 10;
     }
 
