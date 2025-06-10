@@ -59,7 +59,7 @@ function explain(model) {
     box.style.width = `${targetWidth}px`;
   });
 
-  const verticalGap = Math.max(14, containerRect.width * 0.03);
+  const verticalGap = Math.max(12, containerRect.width * 0.025);
   document.documentElement.style.setProperty('--explanation-gap', `${verticalGap}px`);
   // recalc bounds now that spacing may have changed layout
   containerRect = canvasEl.getBoundingClientRect();
@@ -71,8 +71,8 @@ function explain(model) {
   linesSvg.setAttribute('height', containerRect.height);
   linesSvg.setAttribute('viewBox', `0 0 ${containerRect.width} ${containerRect.height}`);
 
-  const laneAreaLeft = leftPad / 2;
-  const laneAreaRight = rightPad / 2;
+  const laneAreaLeft = leftPad / 4;
+  const laneAreaRight = rightPad / 4;
   const leftSpacing = laneAreaLeft / (leftIndices.length + 1);
   const rightSpacing = laneAreaRight / (rightIndices.length + 1);
 
