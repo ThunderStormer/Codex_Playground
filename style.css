@@ -1,3 +1,7 @@
+:root {
+  --explanation-gap: 10px;
+}
+
 body {
   font-family: Arial, sans-serif;
   background: #f0f0f0;
@@ -10,7 +14,7 @@ body {
 
 #canvas {
   position: relative;
-  padding: 20px 80px; /* space for connector lanes on both sides */
+  padding: 20px 40px; /* space for connector lanes on both sides */
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -46,12 +50,12 @@ body {
 }
 
 #explanations {
-  margin-top: 40px;
+  margin-top: calc(var(--explanation-gap) * 2);
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0 80px; /* lane areas on both sides */
+  padding: 0 40px; /* lane areas on both sides */
 }
 
 .explanation {
@@ -59,7 +63,7 @@ body {
   border: 1px solid #ccc;
   padding: 6px 10px;
   border-radius: 4px;
-  margin-bottom: 8px;
+  margin-bottom: var(--explanation-gap);
   position: relative;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   width: auto;
@@ -82,4 +86,9 @@ svg#lines {
 #lines path {
   stroke-width: 2;
   fill: none;
+  stroke-linecap: round;
+}
+
+#lines circle {
+  pointer-events: none;
 }

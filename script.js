@@ -49,7 +49,7 @@ function explain(model) {
 
   // adjust widths
   const canvasEl = document.getElementById('canvas');
-  const containerRect = canvasEl.getBoundingClientRect();
+  let containerRect = canvasEl.getBoundingClientRect();
   const halfWidth = containerRect.width / 2;
   command.style.width = 'auto';
   const contentWidth = command.scrollWidth;
@@ -59,6 +59,11 @@ function explain(model) {
     box.style.width = `${targetWidth}px`;
   });
 
+  const verticalGap = Math.max(12, containerRect.width * 0.025);
+  document.documentElement.style.setProperty('--explanation-gap', `${verticalGap}px`);
+  // recalc bounds now that spacing may have changed layout
+  containerRect = canvasEl.getBoundingClientRect();
+
   // draw connector lines with 90-degree bends
   const leftPad = parseFloat(getComputedStyle(canvasEl).paddingLeft) || 0;
   const rightPad = parseFloat(getComputedStyle(canvasEl).paddingRight) || 0;
@@ -66,8 +71,13 @@ function explain(model) {
   linesSvg.setAttribute('height', containerRect.height);
   linesSvg.setAttribute('viewBox', `0 0 ${containerRect.width} ${containerRect.height}`);
 
-  const leftSpacing = leftPad / (leftIndices.length + 1);
-  const rightSpacing = rightPad / (rightIndices.length + 1);
+  const laneAreaLeft = leftPad / 4;
+  const laneAreaRight = rightPad / 4;
+  const leftSpacing = laneAreaLeft / (leftIndices.length + 1);
+  const rightSpacing = laneAreaRight / (rightIndices.length + 1);
+
+  const gap = 8;
+  const nodeRadius = 4;
 
   spans.forEach(({ span, box }, idx) => {
     const spanRect = span.getBoundingClientRect();
@@ -79,8 +89,8 @@ function explain(model) {
     const attachLeft = idx % 2 === 0;
 
     const endX = attachLeft
-      ? boxRect.left - containerRect.left
-      : boxRect.right - containerRect.left;
+      ? boxRect.left - containerRect.left - gap
+      : boxRect.right - containerRect.left + gap;
 
     let laneIndex, laneX, startBreak;
     if (attachLeft) {
@@ -89,7 +99,7 @@ function explain(model) {
       startBreak = startY + 20 + laneIndex * 10;
     } else {
       laneIndex = rightIndices.indexOf(idx) + 1;
-      laneX = containerRect.width - rightPad + rightSpacing * laneIndex;
+      laneX = containerRect.width - laneAreaRight + rightSpacing * laneIndex;
       startBreak = startY + 20 + laneIndex * 10;
     }
 
@@ -100,10 +110,18 @@ function explain(model) {
       ` L ${laneX} ${endY}` +
       ` L ${endX} ${endY}`;
 
+    const color = `hsl(${idx * 40},70%,50%)`;
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', d);
-    path.setAttribute('stroke', `hsl(${idx * 40},70%,50%)`);
+    path.setAttribute('stroke', color);
     linesSvg.appendChild(path);
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', endX);
+    circle.setAttribute('cy', endY);
+    circle.setAttribute('r', nodeRadius);
+    circle.setAttribute('fill', color);
+    linesSvg.appendChild(circle);
   });
 
   // interactive highlight
