@@ -10,7 +10,7 @@ body {
 
 #canvas {
   position: relative;
-  padding: 20px 20px 20px 80px; /* space for connector lane */
+  padding: 20px 80px; /* space for connector lanes on both sides */
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -25,6 +25,9 @@ body {
   padding: 10px;
   border-radius: 4px;
   font-family: monospace;
+  display: inline-block;
+  max-width: 50%;
+  width: auto;
 }
 
 #command span {
@@ -43,12 +46,12 @@ body {
 }
 
 #explanations {
-  margin-top: 20px;
+  margin-top: 40px;
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-left: 80px; /* lane area */
+  padding: 0 80px; /* lane areas on both sides */
 }
 
 .explanation {
@@ -59,7 +62,8 @@ body {
   margin-bottom: 8px;
   position: relative;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  width: 100%;
+  width: auto;
+  max-width: 50%;
   box-sizing: border-box;
 }
 

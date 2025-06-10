@@ -39,11 +39,22 @@ function explain(model) {
     spans.push({span, box});
   });
 
-
-  // draw connector lines with 90-degree bends
+  // adjust widths
   const canvasEl = document.getElementById('canvas');
   const containerRect = canvasEl.getBoundingClientRect();
+  const halfWidth = containerRect.width / 2;
+  command.style.width = 'auto';
+  const contentWidth = command.scrollWidth;
+  const targetWidth = contentWidth > halfWidth ? contentWidth + 20 : halfWidth;
+  command.style.width = `${targetWidth}px`;
+  document.querySelectorAll('.explanation').forEach((box) => {
+    box.style.width = `${targetWidth}px`;
+  });
+
+  // draw connector lines with 90-degree bends
   const leftPad = parseFloat(getComputedStyle(canvasEl).paddingLeft) || 0;
+  const rightPad = parseFloat(getComputedStyle(canvasEl).paddingRight) || 0;
+  const innerWidth = containerRect.width - leftPad - rightPad;
   linesSvg.setAttribute('width', containerRect.width);
   linesSvg.setAttribute('height', containerRect.height);
 
@@ -53,11 +64,14 @@ function explain(model) {
 
     const startX = spanRect.left + spanRect.width / 2 - containerRect.left - leftPad;
     const startY = spanRect.bottom - containerRect.top;
-    const endX = boxRect.left - containerRect.left - leftPad;
     const endY = boxRect.top + boxRect.height / 2 - containerRect.top;
-
-    const laneX = endX - 20 - idx * 20;   // lane positioned left of the box
-    const midY = startY + 20 + idx * 20;
+    const attachLeft = idx % 2 === 0;
+    const endX = attachLeft
+      ? boxRect.left - containerRect.left - leftPad
+      : boxRect.right - containerRect.left - leftPad;
+    const laneBase = attachLeft ? -leftPad / 2 : innerWidth + rightPad / 2;
+    const laneX = attachLeft ? laneBase - idx * 10 : laneBase + idx * 10;
+    const midY = startY + 30 + idx * 20;
 
     const d =
       `M ${startX} ${startY}` +
