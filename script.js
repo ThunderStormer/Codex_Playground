@@ -49,7 +49,7 @@ function explain(model) {
 
   // adjust widths
   const canvasEl = document.getElementById('canvas');
-  const containerRect = canvasEl.getBoundingClientRect();
+  let containerRect = canvasEl.getBoundingClientRect();
   const halfWidth = containerRect.width / 2;
   command.style.width = 'auto';
   const contentWidth = command.scrollWidth;
@@ -59,8 +59,10 @@ function explain(model) {
     box.style.width = `${targetWidth}px`;
   });
 
-  const verticalGap = Math.max(16, containerRect.width * 0.04);
+  const verticalGap = Math.max(14, containerRect.width * 0.03);
   document.documentElement.style.setProperty('--explanation-gap', `${verticalGap}px`);
+  // recalc bounds now that spacing may have changed layout
+  containerRect = canvasEl.getBoundingClientRect();
 
   // draw connector lines with 90-degree bends
   const leftPad = parseFloat(getComputedStyle(canvasEl).paddingLeft) || 0;
